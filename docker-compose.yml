@@ -1,0 +1,66 @@
+version: '2'
+
+services:
+  ci_postgres:
+    build: ./images/postgres
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/backups:/backups
+    restart: always
+    env_file: .env
+    networks:
+      ci:
+        aliases:
+          - ci_postgres
+
+  ci_nginx:
+    image: nginx
+    volumes:
+      - ./nginx/teamcity_reverse_proxy.template:/etc/nginx/conf.d/teamcity_reverse_proxy.template
+    ports:
+      - ${TEAMCITY_EXTERNAL_PORT_LISTEN_IP}:80:80
+    env_file: .env
+    restart: always
+    command: /bin/bash -c "envsubst '$${TEAMCITY_EXTERNAL_HOSTNAME},$${TEAMCITY_EXTERNAL_PORT},$${SERVER_URL}' < /etc/nginx/conf.d/teamcity_reverse_proxy.template > /etc/nginx/conf.d/teamcity_reverse_proxy.conf && nginx-debug -g 'daemon off;'"
+    networks:
+      ci:
+        aliases:
+          - ci_nginx
+
+  ci_mail:
+    build: ./images/postfix
+    env_file: .env
+    restart: always
+    networks:
+      ci:
+        aliases:
+          - ci_postfix
+
+  teamcity_server:
+    container_name: teamcity-server
+    image: jetbrains/teamcity-server
+    volumes:
+      - ./teamcity/data:/data/teamcity_server/datadir
+      - ./teamcity/logs:/opt/teamcity/logs
+    env_file: .env
+    restart: always
+    networks:
+      ci:
+        aliases:
+          - teamcity-server
+
+  teamcity_agent0:
+    container_name: teamcity-agent0
+    build: ./images/agent
+    env_file: .env
+    volumes:
+      - ./agent0/config:/data/teamcity_agent/conf
+    restart: always
+    networks:
+      ci:
+        aliases:
+          - teamcity-agent0
+
+networks:
+  ci:
+    driver: bridge
