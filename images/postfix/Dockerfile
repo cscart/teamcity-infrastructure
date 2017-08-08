@@ -19,7 +19,4 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY rsyslog.conf /etc/rsyslog.conf
 COPY listen.conf /etc/rsyslog.d/listen.conf
 
-
 CMD /root/init.sh;/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
-
-

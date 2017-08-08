@@ -67,6 +67,7 @@ services:
     restart: always
     networks:
       - ci
+
 networks:
   ci:
     driver: bridge

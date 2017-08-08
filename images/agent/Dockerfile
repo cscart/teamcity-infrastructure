@@ -1,5 +1,7 @@
 FROM jetbrains/teamcity-minimal-agent:latest
 
+MAINTAINER Alexander Bolshakov <abolshakov@cs-cart.com>
+
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
