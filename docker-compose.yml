@@ -49,7 +49,7 @@ services:
 
   teamcity_server:
     container_name: teamcity-server
-    image: jetbrains/teamcity-server
+    image: jetbrains/teamcity-server:eap
     volumes:
       - ./teamcity/data:/data/teamcity_server/datadir
       - ./teamcity/logs:/opt/teamcity/logs
@@ -62,8 +62,10 @@ services:
 
   teamcity_agent:
     build: ./images/agent
-    scale: 3
+    scale: 10
     env_file: .env
+    volumes:
+      - ./key:/key
     restart: always
     networks:
       - ci

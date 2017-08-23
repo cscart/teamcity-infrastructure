@@ -1,4 +1,4 @@
-FROM jetbrains/teamcity-minimal-agent:latest
+FROM jetbrains/teamcity-minimal-agent:eap
 
 MAINTAINER Alexander Bolshakov <abolshakov@cs-cart.com>
 
@@ -11,13 +11,13 @@ RUN apt-get update && apt-get install -y \
     wget \
     git \
     python-software-properties \
-    software-properties-common
-
-RUN add-apt-repository -y ppa:ondrej/php
-RUN add-apt-repository -y "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-
-RUN apt-get update && apt-get install -y \
+    software-properties-common \
+\
+ && add-apt-repository -y ppa:ondrej/php \
+ && add-apt-repository -y "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" \
+ && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+\
+ && apt-get update && apt-get install -y \
     postgresql-client-9.6 \
     mysql-client-5.7 \
     php7.1-cli \
