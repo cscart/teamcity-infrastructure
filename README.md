@@ -15,4 +15,4 @@ Deploys production-ready TeamCity to your machine using docker.
 @Protopopys for helping me. 
 
 ## License
-Do what the f**k you want to.
+MIT.
