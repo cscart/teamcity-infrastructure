@@ -1,0 +1,117 @@
+<?php
+
+define('RESP_BAD_REQUEST', 400);
+define('RESP_OK', 200);
+
+/**
+ * Sends response.
+ *
+ * @param int    $status HTTP code
+ * @param string $body   Response body
+ */
+function ffResponse($status = RESP_OK, $body = '')
+{
+    $protocol = isset($_SERVER['SERVER_PROTOCOL'])
+        ? $_SERVER['SERVER_PROTOCOL']
+        : 'HTTP/1.0';
+
+    header($protocol . ' ' . $status);
+
+    if ($body !== '') {
+        echo $body;
+    }
+
+    exit((int) ($status !== RESP_OK));
+}
+
+/**
+ * Gets request headers.
+ *
+ * @return string[]
+ */
+function ffGetHeaders()
+{
+    $headers = [];
+
+    foreach ($_SERVER as $key => $value) {
+        if (strpos($key, 'HTTP_') !== 0) {
+            continue;
+        }
+
+        $key = explode('_', strtolower($key));
+        array_shift($key);
+        $key = array_map('ucfirst', $key);
+        $key = implode('-', $key);
+        $key = str_replace('Github', 'GitHub', $key);
+
+        $headers[$key] = $value;
+    }
+
+    return $headers;
+}
+
+/**
+ * Checks whether PR refresh status API request should be sent for the PR action.
+ *
+ * @param string $action Webhook PR action
+ *
+ * @return bool
+ */
+function ffIsPrRefreshRequired($action)
+{
+    return $action == 'opened' || $action == 'synchronize';
+}
+
+/**
+ * Performs API request to refresh PR status.
+ *
+ * @param string $owner
+ * @param string $repo
+ * @param int    $number
+ * @param string $clientId
+ * @param string $clientSecret
+ *
+ * @return string
+ */
+function ffRefreshPr($owner, $repo, $number, $clientId, $clientSecret)
+{
+    $url = sprintf(
+        'https://api.github.com/repos/%s/%s/pulls/%d?client_id=%s&client_secret=%s',
+        $owner,
+        $repo,
+        $number,
+        $clientId,
+        $clientSecret
+    );
+
+    $context = stream_context_create([
+        'http' => [
+            'header' => 'User-Agent: Firefly CI Proxy',
+            'method' => 'GET',
+        ],
+    ]);
+
+    return file_get_contents($url, null, $context);
+}
+
+/**
+ * Passes webhook payload as-is to CI.
+ *
+ * @param array  $headers Request headers
+ * @param string $payload Payload body
+ * @param string $url     CI URL to send payload to
+ *
+ * @return string CI response
+ */
+function ffPassthru(array $headers, $payload, $url)
+{
+    $context = stream_context_create([
+        'http' => [
+            'header'  => implode("\r\n", $headers),
+            'method'  => 'POST',
+            'content' => $payload,
+        ],
+    ]);
+
+    return file_get_contents($url, false, $context);
+}
