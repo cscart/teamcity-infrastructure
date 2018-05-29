@@ -1,0 +1,46 @@
+server {
+
+    listen 80;
+    server_name ${WEBHOOK_ADDRESS};
+
+    ############################################################################
+
+    charset utf-8;
+    port_in_redirect off;
+    index index.php;
+
+    ############################################################################
+
+    set $root "/var/www/html/project";
+    root $root;
+
+    ############################################################################
+
+    error_page 598 = @backend;
+
+    ############################################################################
+
+    location @backend {
+        try_files $uri $uri/ =404;
+        fastcgi_pass www;
+        fastcgi_index index.php;
+        fastcgi_read_timeout 1h;
+        fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+        include xtra/fastcgi_params.conf;
+    }
+
+    ############################################################################
+
+    location / {
+        try_files /index.php?$args;
+    }
+
+    location ~ /\.(ht|git) {
+        return 404;
+    }
+
+    location ~* \.php$ {
+        return 598 ;
+    }
+    
+}

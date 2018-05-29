@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+
+  server:
+    env_file: .teamcity_params
+    image: jetbrains/teamcity-server:latest
+    restart: always
+    networks:
+      app:
+        aliases:
+          - teamcity-server
+
+  postgres:
+    image: ${REGISTRY}cscart_base/teamcity:postgres-9.6
+    restart: always
+    secrets:
+      - postgres_secret    
+    networks:
+      app:
+        aliases:
+          - ci_postgres
+    
+  mysql:
+    image: mysql:5.7.22
+    restart: always
+    secrets:
+      - mysql_secret
+    networks:
+      app:
+        aliases:
+          - ci_mysql
+
+  agent_1:
+    image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
+    restart: always
+    environment:
+      SERVER_URL: teamcity-server
+    networks:
+      - app
+
+  agent_2:
+    image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
+    restart: always
+    environment:
+      SERVER_URL: teamcity-server
+    networks:
+      - app
+
+  agent_3:
+    image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
+    restart: always
+    environment:
+      SERVER_URL: teamcity-server
+    networks:
+      - app
+
+secrets:
+  postgres_secret:
+    file: ${POSTGRESQL_SECRET_FILE}
+  mysql_secret:
+    file: ${MYSQL_SECRET_FILE}

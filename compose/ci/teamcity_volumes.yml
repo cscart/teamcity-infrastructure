@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  postgres:
+    volumes:
+      - ${POSTGRESQL_DATA}:/var/lib/postgresql/data
+      - ${POSTGRESQL_BACKUP}:/backups
+  mysql:
+    volumes:
+      - ${MYSQL_DATA}:/var/lib/mysql
+  agent_1:
+    volumes:
+      - ${AGENTS_KEY}:/key
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${AGENT_1_WORK}:/opt/buildagent/work
+      - ${AGENT_1_TEMP}:/opt/buildagent/temp
+  agent_2:
+    volumes:
+      - ${AGENTS_KEY}:/key
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${AGENT_2_WORK}:/opt/buildagent/work
+      - ${AGENT_2_TEMP}:/opt/buildagent/temp
+  agent_3:
+    volumes:
+      - ${AGENTS_KEY}:/key
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${AGENT_3_WORK}:/opt/buildagent/work
+      - ${AGENT_3_TEMP}:/opt/buildagent/temp
