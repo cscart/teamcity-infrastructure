@@ -55,7 +55,8 @@ RUN GPG_KEYS=${GPG_KEYS} \
 		--with-http_v2_module" \
 	&& addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
-	&& apk add --no-cache --virtual .build-deps \
+	&& apk add --no-cache --update --virtual .build-deps \
+	    ca-certificates \
 		gcc \
 		libc-dev \
 		make \
@@ -68,6 +69,7 @@ RUN GPG_KEYS=${GPG_KEYS} \
 		libxslt-dev \
 		gd-dev \
 		geoip-dev \
+	&& update-ca-certificates 2>/dev/null || true \	
 	&& curl -fSL ${NGINX_URL} -o nginx.tar.gz \
 	&& curl -fSL ${NGINX_ASC_URL}  -o nginx.tar.gz.asc \
 # Checking GPG KEY
@@ -85,6 +87,8 @@ RUN GPG_KEYS=${GPG_KEYS} \
 	done; \
 	test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPG_KEYS" && exit 1; \
 	gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz \
+	&& pkill -9 gpg-agent \
+    && pkill -9 dirmngr \
 	&& rm -r "$GNUPGHOME" nginx.tar.gz.asc \
 	&& mkdir -p /usr/src \
 	&& tar -zxC /usr/src -f nginx.tar.gz \

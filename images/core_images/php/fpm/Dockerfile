@@ -31,12 +31,14 @@ ENV PHPIZE_DEPS \
 		re2c
 COPY docker-php-* /usr/local/bin/
 #Installing base packages
-RUN apk add --no-cache --virtual .persistent-deps \
+RUN apk add --no-cache --update --virtual .persistent-deps \
 		ca-certificates \
+		wget \
 		curl \
 		tar \
 		xz \
 		libressl \
+	&& update-ca-certificates 2>/dev/null || true \	
     && mkdir -p $PHP_INI_DIR/conf.d \
 #Checking php package.
  && set -xe; \
@@ -62,6 +64,8 @@ RUN apk add --no-cache --virtual .persistent-deps \
 			gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$key"; \
 		done; \
 		gpg --batch --verify php.tar.xz.asc php.tar.xz; \
+		pkill -9 gpg-agent; \
+        pkill -9 dirmngr; \
 		rm -rf "$GNUPGHOME"; \
 	fi; \
     #
