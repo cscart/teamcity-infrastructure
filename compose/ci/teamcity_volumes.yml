@@ -9,6 +9,10 @@ services:
   mysql:
     volumes:
       - ${MYSQL_DATA}:/var/lib/mysql
+  server:
+    volumes:
+      - ${SERVER_DATA}:/data/teamcity_server/datadir
+      - ${SERVER_LOGS}:/opt/teamcity/logs    
   agent_1:
     volumes:
       - ${AGENTS_KEY}:/key
