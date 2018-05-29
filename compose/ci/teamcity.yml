@@ -14,8 +14,9 @@ services:
   postgres:
     image: ${REGISTRY}cscart_base/teamcity:postgres-9.6
     restart: always
-    secrets:
-      - postgres_secret    
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       app:
         aliases:
@@ -24,8 +25,11 @@ services:
   mysql:
     image: mysql:5.7.22
     restart: always
-    secrets:
-      - mysql_secret
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       app:
         aliases:
@@ -54,9 +58,3 @@ services:
       SERVER_URL: teamcity-server
     networks:
       - app
-
-secrets:
-  postgres_secret:
-    file: ${POSTGRESQL_SECRET_FILE}
-  mysql_secret:
-    file: ${MYSQL_SECRET_FILE}
