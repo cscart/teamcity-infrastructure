@@ -12,7 +12,7 @@ Deploys production-ready TeamCity to your machine using docker.
 
 3. `$ docker-compose -f core_images.yml build && docker-compose -f base_images.yml build && docker-compose -f project_images.yml build` - Build core/base/project images.
 
-4. cd ./ci/
+4. `cd ./ci/`
 
 5. `$ cp .env.example .env`
 
@@ -24,6 +24,16 @@ Deploys production-ready TeamCity to your machine using docker.
    
    c) `$ docker-compose -f general.yml -f proxy_webhook.yml up -d -f webhook.yml` - if you only need a webhook
 
+## How to update webhook
+1. Modify the webhook code in `images/project_images/webhook/webhook`
+2. `cd compose/`
+3. `docker-compose -f project_images.yml build` - Build project images.
+4. `cd ./ci/`
+5. Run it: 
+ 
+   a) `$ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy.yml up -d -f webhook.yml` - if you need all
+ 
+   b) `$ docker-compose -f general.yml -f proxy_webhook.yml up -d -f webhook.yml` - if you only need a webhook
 ## Thanks
 @Protopopys for helping me. 
 
