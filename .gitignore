@@ -1,1 +1,3 @@
-.idea
+compose/*/.env
+compose/*/.mysql_secret
+compose/*/.postgres_secret

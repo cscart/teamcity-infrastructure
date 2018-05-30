@@ -1,0 +1,7 @@
+<?php
+
+return [
+    'ciUrl'        => '${CI_URL}',
+    'clientId'     => '${GITHUB_CLIENT_ID}',
+    'clientSecret' => '${GITHUB_CLIENT_SECRET}',
+];

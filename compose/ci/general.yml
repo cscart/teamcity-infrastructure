@@ -1,0 +1,5 @@
+version: '3.3'
+
+networks:
+  app:
+    driver: bridge

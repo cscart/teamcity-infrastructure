@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+
+  proxy:
+    image: ${REGISTRY}cscart_base/teamcity:proxy-nginx-${NGINX_VERSION}-alpine3.7
+    command: /bin/sh -c "envsubst '$${WEBHOOK_ADDRESS}' < /etc/nginx/templates/proxy_webhook.dist > /etc/nginx/conf.d/proxy_webhook.conf && nginx-debug -g 'daemon off;'"
+    restart: always
+    environment:
+      WEBHOOK_ADDRESS: ${WEBHOOK_ADDRESS}
+    ports:
+      - ${TEAMCITY_EXTERNAL_IP}:80:80
+    networks:
+      - app

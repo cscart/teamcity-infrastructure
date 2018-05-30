@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+
+  proxy:
+    image: ${REGISTRY}cscart_base/teamcity:proxy-nginx-${NGINX_VERSION}-alpine3.7
+    command: /bin/sh -c "envsubst '$${TEAMCITY_ADDRESS}' < /etc/nginx/templates/proxy_teamcity.dist > /etc/nginx/conf.d/proxy_teamcity.conf && nginx-debug -g 'daemon off;'"
+    restart: always
+    environment:
+      TEAMCITY_ADDRESS: ${TEAMCITY_ADDRESS}
+    ports:
+      - ${TEAMCITY_EXTERNAL_IP}:80:80
+    networks:
+      - app

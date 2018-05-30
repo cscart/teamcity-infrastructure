@@ -1,0 +1,20 @@
+version: '3'
+services:
+  nginx:
+    build:
+      args:
+        NGINX_VERSION: ${NGINX_VERSION}
+        GPG_KEYS: "${NGINX_GPG_KEYS}"
+      context: ../images/core_images/nginx
+      dockerfile: Dockerfile
+    image: ${REGISTRY}cscart_core/nginx:${NGINX_VERSION}-alpine3.7
+    
+  php-fpm:
+    build:
+      args:
+        PHP_VERSION: ${PHP70_VERSION}
+        GPG_KEYS: "${PHP70_GPG_KEYS}"
+        PHP_SHA256: "${PHP70_SHA256}"
+      context: ../images/core_images/php/fpm
+      dockerfile: Dockerfile
+    image: ${REGISTRY}cscart_core/php:${PHP70_VERSION}-fpm-alpine3.7

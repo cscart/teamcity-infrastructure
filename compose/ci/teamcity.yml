@@ -1,0 +1,60 @@
+version: '3.3'
+
+services:
+
+  server:
+    env_file: .teamcity_params
+    image: jetbrains/teamcity-server:latest
+    restart: always
+    networks:
+      app:
+        aliases:
+          - teamcity-server
+
+  postgres:
+    image: ${REGISTRY}cscart_base/teamcity:postgres-9.6
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      app:
+        aliases:
+          - ci_postgres
+    
+  mysql:
+    image: mysql:5.7.22
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      app:
+        aliases:
+          - ci_mysql
+
+  agent_1:
+    image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
+    restart: always
+    environment:
+      SERVER_URL: teamcity-server:8111
+    networks:
+      - app
+
+  agent_2:
+    image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
+    restart: always
+    environment:
+      SERVER_URL: teamcity-server:8111
+    networks:
+      - app
+
+  agent_3:
+    image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
+    restart: always
+    environment:
+      SERVER_URL: teamcity-server:8111
+    networks:
+      - app
