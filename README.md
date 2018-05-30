@@ -51,12 +51,12 @@ Example:
    
     ###### Webhook only: 
     ```
-    $ docker-compose -f general.yml -f proxy_webhook.yml up -d -f webhook.yml
+    $ docker-compose -f general.yml -f proxy_webhook.yml -f webhook.yml up -d
     ```
    
     ###### Everything: 
     ```
-    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy.yml up -d -f webhook.yml
+    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy.yml -f webhook.yml up -d
     ``` 
 
 ## How to update Webhook CI Proxy
@@ -82,7 +82,7 @@ Example:
     $ docker-compose -f project_images.yml build
     ```
 
-1. `$ cd composer/ci/`
+1. `$ cd compose/ci/`
 
 1. Run it: see [How to run](#webhook-only) above.
 
