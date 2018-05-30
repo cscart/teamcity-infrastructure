@@ -68,20 +68,18 @@ function ffIsPrRefreshRequired($action)
  * @param string $owner
  * @param string $repo
  * @param int    $number
- * @param string $clientId
- * @param string $clientSecret
+ * @param string $accessToken
  *
  * @return string
  */
-function ffRefreshPr($owner, $repo, $number, $clientId, $clientSecret)
+function ffRefreshPr($owner, $repo, $number, $accessToken)
 {
     $url = sprintf(
-        'https://api.github.com/repos/%s/%s/pulls/%d?client_id=%s&client_secret=%s',
+        'https://api.github.com/repos/%s/%s/pulls/%d?access_token=%s',
         $owner,
         $repo,
         $number,
-        $clientId,
-        $clientSecret
+        $accessToken
     );
 
     $context = stream_context_create([
@@ -105,9 +103,14 @@ function ffRefreshPr($owner, $repo, $number, $clientId, $clientSecret)
  */
 function ffPassthru(array $headers, $payload, $url)
 {
+    $headersString = '';
+    foreach ($headers as $name => $value) {
+        $headersString .= $name . ': ' . $value . "\r\n";
+    }
+
     $context = stream_context_create([
         'http' => [
-            'header'  => implode("\r\n", $headers),
+            'header'  => $headersString,
             'method'  => 'POST',
             'content' => $payload,
         ],

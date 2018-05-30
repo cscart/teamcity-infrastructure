@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', false);
+error_reporting(-1);
+
 require_once 'core.php';
 $config = require_once 'config.php';
 
@@ -20,13 +23,12 @@ if ($headers['X-GitHub-Event'] === 'pull_request'
         $payload->repository->owner->login,
         $payload->repository->name,
         $payload->number,
-        $config['clientId'],
-        $config['clientSecret']
+        $config['accessToken']
     );
 
     $response = json_decode($responseRaw);
     if (!isset($response->id)) {
-        error_log('[FF] PR: '. $responseRaw);
+        error_log('[FF] PR: ' . var_export($responseRaw, true));
     }
 }
 
@@ -34,4 +36,4 @@ $url = rtrim($config['ciUrl'], '/') . '/' . ltrim($_SERVER['REQUEST_URI'], '/');
 
 $response = ffPassthru($headers, $payloadRaw, $url);
 
-ffResponse(RESP_OK, $response);
+ffResponse(RESP_OK, '[FF] ' . $response);
