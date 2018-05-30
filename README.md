@@ -44,17 +44,17 @@ Example:
 
 1. Run it:
 
-    ###### Teamcity only: 
+    ###### Teamcity only
     ```
     $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy_teamcity.yml up -d
     ```
    
-    ###### Webhook only: 
+    ###### Webhook only 
     ```
     $ docker-compose -f general.yml -f proxy_webhook.yml -f webhook.yml up -d
     ```
    
-    ###### Everything: 
+    ###### Everything
     ```
     $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy.yml -f webhook.yml up -d
     ``` 
@@ -79,12 +79,12 @@ Example:
 
 1. Build image: 
     ```
-    $ docker-compose -f project_images.yml build
+    $ docker-compose -f base_images.yml build && docker-compose -f project_images.yml build
     ```
 
 1. `$ cd compose/ci/`
 
-1. Run it: see [How to run](#webhook-only) above.
+1. Run it: see [How to build and run](#everything) above.
 
 ## Thanks
 
