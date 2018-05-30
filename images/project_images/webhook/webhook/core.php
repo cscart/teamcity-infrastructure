@@ -59,7 +59,7 @@ function ffGetHeaders()
  */
 function ffIsPrRefreshRequired($action)
 {
-    return $action == 'opened' || $action == 'synchronize';
+    return $action == 'opened' || $action == 'reopened' || $action == 'synchronize';
 }
 
 /**
