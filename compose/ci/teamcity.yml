@@ -39,7 +39,7 @@ services:
     image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
     restart: always
     environment:
-      SERVER_URL: teamcity-server
+      SERVER_URL: teamcity-server:8111
     networks:
       - app
 
@@ -47,7 +47,7 @@ services:
     image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
     restart: always
     environment:
-      SERVER_URL: teamcity-server
+      SERVER_URL: teamcity-server:8111
     networks:
       - app
 
@@ -55,6 +55,6 @@ services:
     image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
     restart: always
     environment:
-      SERVER_URL: teamcity-server
+      SERVER_URL: teamcity-server:8111
     networks:
       - app
