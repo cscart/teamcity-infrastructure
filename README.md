@@ -42,7 +42,7 @@ Pull requests prefetch is required to update PR's merge branch and get latest co
    
     ###### Teamcity and Webhook CI Proxy
     ```
-    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy_all.yml up -d
+    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f webhook.yml -f proxy_all.yml up -d
     ``` 
 
 ## How to update Webhook CI Proxy
