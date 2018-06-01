@@ -13,16 +13,6 @@ services:
       dockerfile: php70-fpm.dockerfile
     image: ${REGISTRY}cscart_base/webhook:php-${PHP70_VERSION}-fpm-alpine3.7
 
-  webhook_nginx:
-    build:
-      args:
-        REGISTRY: ${REGISTRY}
-        NGINX_VERSION: ${NGINX_VERSION}
-        PROJECT: webhook
-      context: ../images/base_images
-      dockerfile: nginx.dockerfile
-    image: ${REGISTRY}cscart_base/webhook:nginx-${NGINX_VERSION}-alpine3.7
-
 ############################################################################
 
   teamcity_agent:

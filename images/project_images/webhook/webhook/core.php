@@ -84,12 +84,13 @@ function ffRefreshPr($owner, $repo, $number, $accessToken)
 
     $context = stream_context_create([
         'http' => [
-            'header' => 'User-Agent: Firefly CI Proxy',
-            'method' => 'GET',
+            'header'        => 'User-Agent: Firefly CI Proxy',
+            'method'        => 'GET',
+            'ignore_errors' => true,
         ],
     ]);
 
-    return file_get_contents($url, null, $context);
+    return file_get_contents($url, false, $context);
 }
 
 /**
@@ -110,9 +111,10 @@ function ffPassthru(array $headers, $payload, $url)
 
     $context = stream_context_create([
         'http' => [
-            'header'  => $headersString,
-            'method'  => 'POST',
-            'content' => $payload,
+            'header'        => $headersString,
+            'method'        => 'POST',
+            'content'       => $payload,
+            'ignore_errors' => true,
         ],
     ]);
 

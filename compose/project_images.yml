@@ -14,15 +14,4 @@ services:
         PROJECT: webhook
     image: ${REGISTRY}cscart_project/webhook:php-${PHP70_VERSION}-fpm-alpine3.7
 
-  webhook_nginx:
-    build:
-      context: ../images/project_images/webhook
-      dockerfile: nginx.dockerfile
-      args:
-        REGISTRY: ${REGISTRY}
-        NGINX_VERSION: ${NGINX_VERSION}
-        TZ: UTC
-        PROJECT: webhook
-    image: ${REGISTRY}cscart_project/webhook:nginx-${NGINX_VERSION}-alpine3.7
-
 ############################################################################
