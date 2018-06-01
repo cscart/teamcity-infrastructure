@@ -7,11 +7,23 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository -y ppa:openjdk-r/ppa && add-apt-repository -y ppa:git-core/ppa && apt-get update && \
+    apt-get install -y git apt-transport-https ca-certificates && \
+    \
+    apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 9DC858229FC7DD38854AE2D88D81803C0EBFCD88 && \
+    echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable" > /etc/apt/sources.list.d/docker.list && \
+    \
+    apt-cache policy docker-ce && \
+    apt-get update && \
+    apt-get install -y docker-ce=18.03.0~ce-0~ubuntu && \
+    systemctl disable docker && \
+    curl -SL https://github.com/docker/compose/releases/download/1.20.1/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose \
+ && apt-get update && apt-get install -y \
     wget \
     zip \
     unzip \
-    git \
     python-software-properties \
     software-properties-common \
 \
