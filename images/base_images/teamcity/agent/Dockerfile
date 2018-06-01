@@ -26,6 +26,7 @@ RUN apt-get update && \
     unzip \
     python-software-properties \
     software-properties-common \
+    rsync \
 \
  && add-apt-repository -y ppa:ondrej/php \
  && add-apt-repository -y "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" \
