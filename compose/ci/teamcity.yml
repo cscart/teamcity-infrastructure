@@ -6,6 +6,8 @@ services:
     env_file: .teamcity_params
     image: jetbrains/teamcity-server:latest
     restart: always
+    environment:
+      LOGSPOUT: ignore
     networks:
       app:
         aliases:
@@ -15,6 +17,7 @@ services:
     image: ${REGISTRY}cscart_base/teamcity:postgres-9.6
     restart: always
     environment:
+      LOGSPOUT: ignore
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
@@ -26,6 +29,7 @@ services:
     image: mysql:5.7.22
     restart: always
     environment:
+      LOGSPOUT: ignore
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -39,6 +43,7 @@ services:
     image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
     restart: always
     environment:
+      LOGSPOUT: ignore
       SERVER_URL: teamcity-server:8111
     networks:
       - app
@@ -47,6 +52,7 @@ services:
     image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
     restart: always
     environment:
+      LOGSPOUT: ignore
       SERVER_URL: teamcity-server:8111
     networks:
       - app
@@ -55,6 +61,7 @@ services:
     image: ${REGISTRY}cscart_base/teamcity:agent-jetbrains
     restart: always
     environment:
+      LOGSPOUT: ignore
       SERVER_URL: teamcity-server:8111
     networks:
       - app

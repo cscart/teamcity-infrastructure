@@ -5,6 +5,8 @@ services:
   php:
     image: ${REGISTRY}cscart_project/webhook:php-${PHP70_VERSION}-fpm-alpine3.7
     restart: always
+    environment:
+      LOGSPOUT: ignore
     networks:
       app:
         aliases:

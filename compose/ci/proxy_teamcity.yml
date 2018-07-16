@@ -7,6 +7,7 @@ services:
     command: /bin/sh -c "envsubst '$${TEAMCITY_ADDRESS}' < /etc/nginx/templates/proxy_teamcity.dist > /etc/nginx/conf.d/proxy_teamcity.conf && nginx-debug -g 'daemon off;'"
     restart: always
     environment:
+      LOGSPOUT: ignore
       TEAMCITY_ADDRESS: ${TEAMCITY_ADDRESS}
     ports:
       - ${TEAMCITY_EXTERNAL_IP}:80:80
