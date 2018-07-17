@@ -18,5 +18,6 @@ services:
       - ${PROXY_SSL}/ssl:/etc/nginx/ssl
     ports:
       - ${TEAMCITY_EXTERNAL_IP}:80:80
+      - ${TEAMCITY_EXTERNAL_IP}:443:443
     networks:
       - app

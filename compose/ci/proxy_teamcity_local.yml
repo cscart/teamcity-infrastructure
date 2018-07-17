@@ -14,5 +14,6 @@ services:
       TEAMCITY_ADDRESS: ${TEAMCITY_ADDRESS}
     ports:
       - ${TEAMCITY_EXTERNAL_IP}:80:80
+      - ${TEAMCITY_EXTERNAL_IP}:443:443
     networks:
       - app
