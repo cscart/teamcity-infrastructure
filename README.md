@@ -24,7 +24,7 @@ Pull requests prefetch is required to update PR's merge branch and get latest co
 
 1. Build images:
     ```
-    $ docker-compose -f core_images.yml build && docker-compose -f base_images.yml build && docker-compose -f project_images.yml build
+    $ docker-compose build
     ```
 
 1. `$ cd compose/ci/`
@@ -35,14 +35,24 @@ Pull requests prefetch is required to update PR's merge branch and get latest co
 
 1. Run it:
 
-    ###### Teamcity only
+    ###### Teamcity only with selfsinged SSL
     ```
-    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy_teamcity.yml up -d
+    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy_teamcity_local.yml up -d
     ```
    
-    ###### Teamcity and Webhook CI Proxy
+    ###### Teamcity and Webhook CI Proxy with selfsinged SSL
     ```
-    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f webhook.yml -f proxy_all.yml up -d
+    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f webhook.yml -f proxy_all_local.yml up -d
+    ``` 
+
+    ###### Teamcity only with SSL (acme.sh)
+    ```
+    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f proxy_teamcity_local.yml up -d
+    ```
+   
+    ###### Teamcity and Webhook CI Proxy with SSL (acme.sh)
+    ```
+    $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f webhook.yml -f proxy_all_local.yml up -d
     ``` 
 
 ## How to update Webhook CI Proxy

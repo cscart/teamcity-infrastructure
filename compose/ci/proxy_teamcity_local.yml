@@ -4,11 +4,10 @@ services:
 
   proxy:
     image: ${REGISTRY}cscart_base/teamcity:proxy-nginx-stable-alpine3.7
-    command: /bin/sh -c "envsubst '$${TEAMCITY_ADDRESS},$${ACCESS},$${ALLOW_IP1},$${ALLOW_IP2}' < /etc/nginx/templates/proxy_all.dist > /etc/nginx/conf.d/proxy_all.conf && cp -f /etc/nginx/templates/*.conf /etc/nginx/xtra/ && cp -f /etc/nginx/templates/.htpasswd /etc/nginx/xtra/ && /usr/bin/supervisord -c /etc/supervisord.conf"
+    command: /bin/sh -c "envsubst '$${TEAMCITY_ADDRESS},$${ACCESS},$${ALLOW_IP1},$${ALLOW_IP2}' < /etc/nginx/templates/proxy_teamcity.dist > /etc/nginx/conf.d/proxy_teamcity.conf && cp -f /etc/nginx/templates/.htpasswd /etc/nginx/xtra/ && nginx-debug -g 'daemon off;'"
     restart: always
     environment:
       LOGSPOUT: ignore
-      DOMAIN: ${TEAMCITY_ADDRESS}
       ACCESS: ${ACCESS}
       ALLOW_IP1: ${ALLOW_IP1}
       ALLOW_IP2: ${ALLOW_IP2}

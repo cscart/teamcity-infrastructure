@@ -1,6 +1,6 @@
 ARG REGISTRY
 ARG PHP_VERSION
-FROM ${REGISTRY}cscart_base/webhook:php-${PHP_VERSION}-fpm-alpine3.7
+FROM protopopys/docker-php:${PHP_VERSION}-fpm-alpine3.7
 LABEL maintainer="Protopopys <protopopys@gmail.com>"
 
 ENV APP_HOME=/var/www/html/project

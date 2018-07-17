@@ -1,4 +1,3 @@
 compose/*/.env
-compose/*/.mysql_secret
-compose/*/.postgres_secret
+compose/**/.env
 images/project_images/webhook/webhook/config.php
