@@ -21,3 +21,7 @@ services:
       - ${TEAMCITY_EXTERNAL_IP}:443:443
     networks:
       - app
+
+  postfix:
+    volumes:
+      - ${PROXY_SSL}/ssl:/etc/postfix/certs:ro

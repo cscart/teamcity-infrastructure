@@ -65,3 +65,15 @@ services:
       SERVER_URL: teamcity-server:8111
     networks:
       - app
+
+  postfix:
+    image: protopopys/postfix:debian-jessie
+    restart: always
+    environment:
+      maildomain: ${SMTP_DOMAIN}
+      smtp_user: ${SMTP_USER}:${SMTP_PASS}
+      maxmailsize: ${MAXMAILSIZE}
+    networks:
+      app:
+        aliases:
+          - postfix
