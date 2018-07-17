@@ -13,6 +13,9 @@ services:
       ALLOW_IP1: ${ALLOW_IP1}
       ALLOW_IP2: ${ALLOW_IP2}
       TEAMCITY_ADDRESS: ${TEAMCITY_ADDRESS}
+    volumes:
+      - ${PROXY_SSL}/acme:/acme.sh:rw
+      - ${PROXY_SSL}/ssl:/etc/nginx/ssl
     ports:
       - ${TEAMCITY_EXTERNAL_IP}:80:80
     networks:
