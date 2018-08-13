@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+  teamcity_agent:
+    build:
+      context: teamcity/agent
+    image: ${REGISTRY:-}cscart_base/teamcity:agent-jetbrains
+
+  teamcity_postgres:
+    build:
+      context: teamcity/postgres
+    image: ${REGISTRY:-}cscart_base/teamcity:postgres-9.6
+
+  teamcity_proxy:
+    build:
+      args:
+        REGISTRY: ${REGISTRY:-}
+      context: proxy/nginx
+    image: ${REGISTRY:-}cscart_base/teamcity:proxy-nginx-stable-alpine3.7
+
+  webhook_php:
+    build:
+      context: webhook
+      args:
+        REGISTRY: ${REGISTRY:-}
+        PHP_VERSION: ${PHP70_VERSION:-7.0.30}
+        TZ: UTC
+    image: ${REGISTRY:-}cscart_base/webhook:php-${PHP70_VERSION:-7.0.30}-fpm-alpine3.7

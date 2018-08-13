@@ -1,5 +1,4 @@
-ARG REGISTRY
-ARG PHP_VERSION
+ARG PHP_VERSION=7.0.30
 FROM protopopys/docker-php:${PHP_VERSION}-fpm-alpine3.7
 LABEL maintainer="Protopopys <protopopys@gmail.com>"
 
