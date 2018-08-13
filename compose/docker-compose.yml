@@ -25,5 +25,4 @@ services:
         REGISTRY: ${REGISTRY}
         PHP_VERSION: ${PHP70_VERSION}
         TZ: UTC
-        PROJECT: webhook
     image: ${REGISTRY}cscart_base/webhook:php-${PHP70_VERSION}-fpm-alpine3.7

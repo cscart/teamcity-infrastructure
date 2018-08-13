@@ -39,13 +39,6 @@ server {
     listen       443 ssl http2;
     server_name  ${TEAMCITY_ADDRESS};
 
-    satisfy any;
-    allow ${ALLOW_IP1};
-    allow ${ALLOW_IP2};
-    ${ACCESS} all;
-    auth_basic "Private Property";
-    auth_basic_user_file /etc/nginx/xtra/.htpasswd;
-
     if ($block_ua) {
         return 444;
     }
@@ -62,6 +55,7 @@ server {
     }
 
     location /app/hooks/github {
+        auth_basic off;
         return 598;
     }
 
