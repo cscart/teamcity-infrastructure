@@ -79,4 +79,7 @@ RUN apt-get -y install gettext python-pip --no-install-recommends \
  && pip install -U setuptools \
  && pip install ${DOCS_DEPS} \
  && composer global require "phpunit/phpunit=4.8.*" \
- && composer global require "phpunit/dbunit=1.4.*"
+ && composer global require "phpunit/dbunit=1.4.*" \
+ && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+ && apt-get install -y nodejs \
+ && apt-get install -y build-essential
