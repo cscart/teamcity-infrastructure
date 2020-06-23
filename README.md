@@ -18,20 +18,23 @@ Pull requests prefetch is required to update PR's merge branch and get latest co
 
 ## How to build and run
 
-1. `$ cd compose/`
+1. `$ cd compose/ci/`
 
-1. Modify environment variables at `.env` to feed your needs
+1. `$ cp .env.dist .env`
+
+1. Modify environment variables at `.env` to fit your needs.
+
+    `${WEBHOOK_CI_PROXY_ACCESS_TOKEN}` is used for Webhook CI Proxy.
+
+    You can obtain a token from [https://github.com/settings/tokens](https://github.com/settings/tokens).
+
+    `{WEBHOOK_CI_PROXY_CI_URL}` is the **interal** address of a TeamCity server.
+    Default one is `http://teamcity-server:8111`.
 
 1. Build images:
     ```
     $ docker-compose build
     ```
-
-1. `$ cd compose/ci/`
-
-1. `$ cp .env.dist .env`
-
-1.  Modify environment variables at `.env` to feed your needs
 
 1. Run it:
 
@@ -53,34 +56,4 @@ Pull requests prefetch is required to update PR's merge branch and get latest co
     ###### Teamcity and Webhook CI Proxy with SSL (acme.sh)
     ```
     $ docker-compose -f general.yml -f teamcity.yml -f teamcity_volumes.yml -f webhook.yml -f proxy_all.yml up -d
-    ``` 
-
-## How to update Webhook CI Proxy
-
-1. `$ cd images/project_images/webhook/webhook`
-
-1. `$ cp config.php.dist config.php`
-
-1. Modify the `config.php`:
-    
-    * Specify GitHub access token instead of `${GITHUB_ACCESS_TOKEN}`. 
-        
-        Obtain your token on [https://github.com/settings/tokens](https://github.com/settings/tokens).
-
-1. `$ cd compose/`
-
-1. Build image: 
     ```
-    $ docker-compose -f base_images.yml build && docker-compose -f project_images.yml build
-    ```
-
-1. `$ cd compose/ci/`
-
-1. Run it: see [How to build and run :: Teamcity and Webhook CI Proxy](#teamcity-and-webhook-ci-proxy).
-
-## Thanks
-
-@Protopopys for helping me. 
-
-## License
-MIT.
