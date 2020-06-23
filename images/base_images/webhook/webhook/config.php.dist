@@ -1,6 +1,0 @@
-<?php
-
-return [
-    'ciUrl'       => 'http://teamcity-server:8111',
-    'accessToken' => '${GITHUB_ACCESS_TOKEN}',
-];
