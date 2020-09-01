@@ -14,16 +14,15 @@ error_reporting(-1);
 require_once 'functions.php';
 
 $payloadRaw = file_get_contents('php://input');
-$payload = json_decode($payloadRaw);
+$payload = json_decode($payloadRaw, false);
 $headers = getHeaders();
 
 if (!isset($headers['X-GitHub-Event']) || !$payload) {
     sendResponse(HTTP_STATUS_BAD_REQUEST);
 }
 
-if ($headers['X-GitHub-Event'] === 'pull_request'
-    && isset($payload->number)
-    && isset($payload->action)
+if (isset($payload->number, $payload->action)
+    && $headers['X-GitHub-Event'] === 'pull_request'
     && isPrRefreshRequired($payload->action)
 ) {
     $responseRaw = refreshPr(
@@ -33,7 +32,7 @@ if ($headers['X-GitHub-Event'] === 'pull_request'
         getenv('WEBHOOK_CI_PROXY_ACCESS_TOKEN')
     );
 
-    $response = json_decode($responseRaw);
+    $response = json_decode($responseRaw, false);
     if (!isset($response->id)) {
         error_log('[Webhook CI Proxy] PR: ' . var_export($responseRaw, true));
     }
