@@ -7,6 +7,8 @@ services:
     restart: always
     environment:
       LOGSPOUT: ignore
+      WEBHOOK_CI_PROXY_CI_URL: ${WEBHOOK_CI_PROXY_CI_URL}
+      WEBHOOK_CI_PROXY_ACCESS_TOKEN: ${WEBHOOK_CI_PROXY_ACCESS_TOKEN}
     networks:
       app:
         aliases:

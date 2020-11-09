@@ -1,7 +1,9 @@
 <?php
 
-define('RESP_BAD_REQUEST', 400);
-define('RESP_OK', 200);
+namespace WebhookCiProxy;
+
+const HTTP_STATUS_BAD_REQUEST = 400;
+const HTTP_STATUS_OK = 200;
 
 /**
  * Sends response.
@@ -9,7 +11,7 @@ define('RESP_OK', 200);
  * @param int    $status HTTP code
  * @param string $body   Response body
  */
-function ffResponse($status = RESP_OK, $body = '')
+function sendResponse($status = HTTP_STATUS_OK, $body = '')
 {
     $protocol = isset($_SERVER['SERVER_PROTOCOL'])
         ? $_SERVER['SERVER_PROTOCOL']
@@ -21,7 +23,7 @@ function ffResponse($status = RESP_OK, $body = '')
         echo $body;
     }
 
-    exit((int) ($status !== RESP_OK));
+    exit((int) ($status !== HTTP_STATUS_OK));
 }
 
 /**
@@ -29,7 +31,7 @@ function ffResponse($status = RESP_OK, $body = '')
  *
  * @return string[]
  */
-function ffGetHeaders()
+function getHeaders()
 {
     $headers = [];
 
@@ -57,9 +59,11 @@ function ffGetHeaders()
  *
  * @return bool
  */
-function ffIsPrRefreshRequired($action)
+function isPrRefreshRequired($action)
 {
-    return $action == 'opened' || $action == 'reopened' || $action == 'synchronize';
+    return $action === 'opened'
+        || $action === 'reopened'
+        || $action === 'synchronize';
 }
 
 /**
@@ -72,19 +76,18 @@ function ffIsPrRefreshRequired($action)
  *
  * @return string
  */
-function ffRefreshPr($owner, $repo, $number, $accessToken)
+function refreshPr($owner, $repo, $number, $accessToken)
 {
     $url = sprintf(
-        'https://api.github.com/repos/%s/%s/pulls/%d?access_token=%s',
+        'https://api.github.com/repos/%s/%s/pulls/%d',
         $owner,
         $repo,
-        $number,
-        $accessToken
+        $number
     );
 
     $context = stream_context_create([
         'http' => [
-            'header'        => 'User-Agent: Firefly CI Proxy',
+            'header'        => "User-Agent: Webhook CI Proxy\r\nAuthorization: token {$accessToken}\r\n",
             'method'        => 'GET',
             'ignore_errors' => true,
         ],
@@ -102,7 +105,7 @@ function ffRefreshPr($owner, $repo, $number, $accessToken)
  *
  * @return string CI response
  */
-function ffPassthru(array $headers, $payload, $url)
+function passPayloadToCi(array $headers, $payload, $url)
 {
     $headersString = '';
     foreach ($headers as $name => $value) {

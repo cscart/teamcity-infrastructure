@@ -1,39 +1,45 @@
 <?php
 
+use function WebhookCiProxy\getHeaders;
+use function WebhookCiProxy\isPrRefreshRequired;
+use function WebhookCiProxy\passPayloadToCi;
+use function WebhookCiProxy\refreshPr;
+use function WebhookCiProxy\sendResponse;
+use const WebhookCiProxy\HTTP_STATUS_BAD_REQUEST;
+use const WebhookCiProxy\HTTP_STATUS_OK;
+
 ini_set('display_errors', false);
 error_reporting(-1);
 
-require_once 'core.php';
-$config = require_once 'config.php';
+require_once 'functions.php';
 
 $payloadRaw = file_get_contents('php://input');
-$payload = json_decode($payloadRaw);
-$headers = ffGetHeaders();
+$payload = json_decode($payloadRaw, false);
+$headers = getHeaders();
 
 if (!isset($headers['X-GitHub-Event']) || !$payload) {
-    ffResponse(RESP_BAD_REQUEST);
+    sendResponse(HTTP_STATUS_BAD_REQUEST);
 }
 
-if ($headers['X-GitHub-Event'] === 'pull_request'
-    && isset($payload->number)
-    && isset($payload->action)
-    && ffIsPrRefreshRequired($payload->action)
+if (isset($payload->number, $payload->action)
+    && $headers['X-GitHub-Event'] === 'pull_request'
+    && isPrRefreshRequired($payload->action)
 ) {
-    $responseRaw = ffRefreshPr(
+    $responseRaw = refreshPr(
         $payload->repository->owner->login,
         $payload->repository->name,
         $payload->number,
-        $config['accessToken']
+        getenv('WEBHOOK_CI_PROXY_ACCESS_TOKEN')
     );
 
-    $response = json_decode($responseRaw);
+    $response = json_decode($responseRaw, false);
     if (!isset($response->id)) {
-        error_log('[FF] PR: ' . var_export($responseRaw, true));
+        error_log('[Webhook CI Proxy] PR: ' . var_export($responseRaw, true));
     }
 }
 
-$url = rtrim($config['ciUrl'], '/') . '/' . ltrim($_SERVER['REQUEST_URI'], '/');
+$url = rtrim(getenv('WEBHOOK_CI_PROXY_CI_URL'), '/') . '/' . ltrim($_SERVER['REQUEST_URI'], '/');
 
-$response = ffPassthru($headers, $payloadRaw, $url);
+$response = passPayloadToCi($headers, $payloadRaw, $url);
 
-ffResponse(RESP_OK, '[FF] ' . $response);
+sendResponse(HTTP_STATUS_OK, '[Webhook CI Proxy] ' . $response);

@@ -1,3 +1,2 @@
 compose/*/.env
 compose/**/.env
-images/base_images/webhook/webhook/config.php
